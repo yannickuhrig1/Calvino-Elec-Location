@@ -1,0 +1,188 @@
+// Prisma Schema for Calvino Location
+// Provider can be switched to "postgresql" with DATABASE_URL="postgresql://..." in production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  role         String        @default("CLIENT") // "CLIENT" | "ADMIN"
+  firstName    String
+  lastName     String
+  phone        String?
+  company      String?
+  address      String?
+  city         String?
+  postalCode   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reservations Reservation[]
+}
+
+model Category {
+  id           String      @id @default(cuid())
+  name         String
+  slug         String      @unique
+  description  String?
+  icon         String?     // Name of icon (wrench, truck, droplets, etc.)
+  displayOrder Int         @default(0)
+  active       Boolean     @default(true)
+  equipments   Equipment[]
+}
+
+model Equipment {
+  id                     String          @id @default(cuid())
+  name                   String
+  slug                   String          @unique
+  summary                String
+  description            String
+  categoryId             String
+  category               Category        @relation(fields: [categoryId], references: [id])
+  brand                  String?
+  model                  String?
+  imageUrl               String
+  galleryJson            String?         // JSON array of strings
+  specsJson              String?         // JSON key/value specifications
+  includedAccessoriesJson String?        // JSON array of included accessories
+  excludedConsumablesJson String?        // JSON array of excluded items (e.g. carburant, disques)
+  safetyGuidelines       String?         // EPI and security instructions
+  usageGuidelines        String?         // Operation and startup tips
+  pricingType            String          @default("STANDARD") // "STANDARD" | "QUOTE_ONLY"
+  priceHalfDay           Float?          // Half-day rate if applicable
+  priceDay               Float           // 1-day rate
+  priceWeekend           Float?          // Weekend package rate
+  priceWeek              Float?          // 7-day week package rate
+  depositAmount          Float           // Caution amount (€)
+  purchasePriceHt        Float           @default(0) // Montant d'achat HT (devis MaxOutil)
+  amortizationYears      Int             @default(3) // Durée d'amortissement fiscal (ex: 3 ou 5 ans)
+  purchaseDate           DateTime?       // Date d'acquisition / mise en service
+  minDurationHours       Int             @default(24) // Min rental duration in hours
+  deliveryAvailable      Boolean         @default(true)
+  deliveryFlatFee        Float           @default(0)
+  cleaningFee            Float           @default(0)
+  bufferHoursBetweenRentals Int          @default(2) // buffer margin in hours
+  published              Boolean         @default(true)
+  archived               Boolean         @default(false)
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  units                  EquipmentUnit[]
+  reservations           Reservation[]
+}
+
+model EquipmentUnit {
+  id                  String           @id @default(cuid())
+  equipmentId         String
+  equipment           Equipment        @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  internalCode        String           @unique // e.g. "CALV-COMP-01"
+  serialNumber        String?
+  status              String           @default("AVAILABLE") // "AVAILABLE" | "RENTED" | "MAINTENANCE" | "OUT_OF_SERVICE"
+  notes               String?
+  purchaseDate        DateTime?
+  lastMaintenanceDate DateTime?
+  nextMaintenanceDate DateTime?
+  meterHours          Float?
+  reservations        Reservation[]
+  maintenanceLogs     MaintenanceLog[]
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+}
+
+model Reservation {
+  id                     String         @id @default(cuid())
+  reservationNumber      String         @unique // e.g. "CALV-2026-0001"
+  userId                 String?
+  user                   User?          @relation(fields: [userId], references: [id])
+  equipmentId            String
+  equipment              Equipment      @relation(fields: [equipmentId], references: [id])
+  unitId                 String?        // Assigned physical unit
+  unit                   EquipmentUnit? @relation(fields: [unitId], references: [id])
+  customerName           String
+  customerEmail          String
+  customerPhone          String
+  customerCompany        String?
+  customerAddress        String
+  customerCity           String?
+  customerPostalCode     String?
+  startDate              DateTime
+  endDate                DateTime
+  pickupTime             String?        // "08:30"
+  returnTime             String?        // "18:00"
+  deliveryMode           String         @default("PICKUP_DEPOT") // "PICKUP_DEPOT" | "DELIVERY_ON_SITE"
+  deliveryAddress        String?
+  selectedAccessoriesJson String?
+  rentalDays             Float
+  basePrice              Float          // Equipment rental amount
+  deliveryFee            Float          @default(0)
+  optionsFee             Float          @default(0)
+  subtotalHt             Float
+  taxRate                Float          @default(20.0) // 20% TVA
+  taxAmount              Float
+  totalAmount            Float          // Total TTC
+  depositAmount          Float          // Caution (distinct, non encaissee)
+  calculationJson        String         // Frozen snapshot of pricing calculation details
+  status                 String         @default("PENDING") // "PENDING" | "CONFIRMED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "REJECTED"
+  promoCodeId            String?
+  promoCode              PromoCode?     @relation(fields: [promoCodeId], references: [id])
+  promoCodeApplied       String?        // Code text, e.g. "BIENVENUE10"
+  promoDiscountAmount    Float          @default(0) // Discount in € HT
+  cancellationReason     String?
+  adminNotes             String?
+  customerNotes          String?
+  statusHistoryJson      String         // Audit log of state transitions
+  secretAccessCode       String         // Direct guest tracking code
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+}
+
+model PromoCode {
+  id              String        @id @default(cuid())
+  code            String        @unique // e.g. "BIENVENUE10", "WEEKEND15", "PROBTP50"
+  description     String?       // e.g. "-10% sur toute votre location"
+  discountType    String        @default("PERCENTAGE") // "PERCENTAGE" | "FIXED_AMOUNT"
+  discountValue   Float         // 10 (pour 10%) ou 50 (pour 50€ HT)
+  minAmountHt     Float?        // Montant HT minimum
+  minRentalDays   Int?          // Durée minimum en jours
+  maxUses         Int?          // Limite d'utilisations globale
+  usedCount       Int           @default(0)
+  validFrom       DateTime      @default(now())
+  validUntil      DateTime?     // Expiration
+  active          Boolean       @default(true)
+  showInBanner    Boolean       @default(false) // Si true -> mis en avant dans le bandeau promo public
+  bannerHighlight String?       // e.g. "Offre Découverte Chantier"
+  reservations    Reservation[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model MaintenanceLog {
+  id          String        @id @default(cuid())
+  unitId      String
+  unit        EquipmentUnit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  type        String        // "REVISION" | "REPARATION" | "CONTROLE_SECURITE"
+  description String
+  cost        Float?
+  performedBy String?
+  performedAt DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+}
+
+model SiteSettings {
+  id              String   @id @default("default")
+  companyName     String   @default("CALVINO ELEC")
+  phone           String   @default("06 63 44 74 89")
+  email           String   @default("calvinoelec@gmail.com")
+  address         String   @default("71 RUE DE LA FONTENELLE, 57420 COIN-LES-CUVRY")
+  openingHoursJson String  // JSON for hours Monday-Saturday
+  depositPolicy   String   // Caution text
+  deliveryPolicy  String   // Delivery terms
+  isDemoMode      Boolean  @default(true)
+  updatedAt       DateTime @updatedAt
+}
