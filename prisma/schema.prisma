@@ -2,7 +2,8 @@
 // Provider can be switched to "postgresql" with DATABASE_URL="postgresql://..." in production
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
