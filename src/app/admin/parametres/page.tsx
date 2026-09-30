@@ -19,6 +19,10 @@ export default async function AdminParametresPage() {
       openingHoursJson: '{}',
       depositPolicy: '',
       deliveryPolicy: '',
+      siret: '918 642 984 00018',
+      tvaIntra: 'FR84918642984',
+      rcsCity: 'Metz',
+      assuranceRcp: 'Police BTP Pro Allianz n° 58493021',
       isDemoMode: true,
       updatedAt: new Date(),
     };
@@ -31,7 +35,7 @@ export default async function AdminParametresPage() {
           Paramètres généraux & Identité d'agence
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-          Configurez les coordonnées, horaires d'ouverture et mentions de caution appliquées sur tout le site.
+          Configurez les coordonnées, informations légales (SIRET, TVA, RCS), horaires et modalités.
         </p>
       </div>
 
@@ -44,6 +48,10 @@ export default async function AdminParametresPage() {
           openingHoursJson: settings.openingHoursJson,
           depositPolicy: settings.depositPolicy,
           deliveryPolicy: settings.deliveryPolicy,
+          siret: settings.siret || '918 642 984 00018',
+          tvaIntra: settings.tvaIntra || 'FR84918642984',
+          rcsCity: settings.rcsCity || 'Metz',
+          assuranceRcp: settings.assuranceRcp || '',
         }}
       />
     </div>

@@ -120,6 +120,77 @@ export default async function AdminReservationDetailPage({ params }: AdminDetail
           </div>
         </div>
 
+        {/* Actions Rapides Métier : Contrat, Facture, État des Lieux */}
+        <div style={{
+          display: 'flex',
+          gap: '0.75rem',
+          flexWrap: 'wrap',
+          marginBottom: '1.5rem',
+          padding: '0.85rem 1.25rem',
+          backgroundColor: '#0F172A',
+          borderRadius: 'var(--radius-md)',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#F8FAFC', fontSize: '0.85rem', fontWeight: 700 }}>
+            <span>Documents officiels & inspections :</span>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <Link
+              href={`/admin/reservations/${reservation.id}/contrat`}
+              style={{
+                backgroundColor: reservation.contractSignedAt ? '#059669' : '#D97706',
+                color: '#FFF',
+                padding: '0.45rem 0.9rem',
+                borderRadius: '0.35rem',
+                fontSize: '0.825rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <span>📄 Contrat & Signature {reservation.contractSignedAt ? '✓' : ''}</span>
+            </Link>
+            <Link
+              href={`/admin/reservations/${reservation.id}/facture`}
+              style={{
+                backgroundColor: '#2563EB',
+                color: '#FFF',
+                padding: '0.45rem 0.9rem',
+                borderRadius: '0.35rem',
+                fontSize: '0.825rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <span>🧾 Facture PDF</span>
+            </Link>
+            <Link
+              href={`/admin/reservations/${reservation.id}/etat-des-lieux`}
+              style={{
+                backgroundColor: '#1E293B',
+                color: '#E2E8F0',
+                border: '1px solid #334155',
+                padding: '0.45rem 0.9rem',
+                borderRadius: '0.35rem',
+                fontSize: '0.825rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <span>📸 État des Lieux & Photos</span>
+            </Link>
+          </div>
+        </div>
+
         {/* Coordonnées Client */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', backgroundColor: 'var(--bg-surface-subtle)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
           <div>

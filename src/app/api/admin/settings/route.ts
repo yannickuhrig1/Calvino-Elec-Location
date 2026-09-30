@@ -10,7 +10,19 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { companyName, phone, email, address, openingHoursJson, depositPolicy, deliveryPolicy } = body;
+    const {
+      companyName,
+      phone,
+      email,
+      address,
+      openingHoursJson,
+      depositPolicy,
+      deliveryPolicy,
+      siret,
+      tvaIntra,
+      rcsCity,
+      assuranceRcp,
+    } = body;
 
     const updated = await prisma.siteSettings.upsert({
       where: { id: 'default' },
@@ -22,6 +34,10 @@ export async function PATCH(req: NextRequest) {
         openingHoursJson,
         depositPolicy,
         deliveryPolicy,
+        siret,
+        tvaIntra,
+        rcsCity,
+        assuranceRcp,
       },
       create: {
         id: 'default',
@@ -32,6 +48,10 @@ export async function PATCH(req: NextRequest) {
         openingHoursJson: openingHoursJson || '{}',
         depositPolicy: depositPolicy || '',
         deliveryPolicy: deliveryPolicy || '',
+        siret: siret || '918 642 984 00018',
+        tvaIntra: tvaIntra || 'FR84918642984',
+        rcsCity: rcsCity || 'Metz',
+        assuranceRcp: assuranceRcp || '',
       },
     });
 

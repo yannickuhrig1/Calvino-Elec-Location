@@ -13,6 +13,10 @@ interface Props {
     openingHoursJson: string;
     depositPolicy: string;
     deliveryPolicy: string;
+    siret: string;
+    tvaIntra: string;
+    rcsCity: string;
+    assuranceRcp: string;
   };
 }
 
@@ -25,6 +29,10 @@ export function AdminSettingsClient({ initialSettings }: Props) {
     address: initialSettings.address || '',
     depositPolicy: initialSettings.depositPolicy || '',
     deliveryPolicy: initialSettings.deliveryPolicy || '',
+    siret: initialSettings.siret || '',
+    tvaIntra: initialSettings.tvaIntra || '',
+    rcsCity: initialSettings.rcsCity || '',
+    assuranceRcp: initialSettings.assuranceRcp || '',
   });
 
   const [hours, setHours] = useState(() => {
@@ -134,6 +142,61 @@ export function AdminSettingsClient({ initialSettings }: Props) {
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               required
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Mentions Légales & Fiscales */}
+      <div className="card" style={{ padding: '2rem', marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1.25rem', color: 'var(--brand-navy)', marginBottom: '1.25rem' }}>
+          Mentions Légales & Fiscales (Factures & Contrats de location)
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+          <div className="form-group">
+            <label className="form-label">Numéro SIRET (14 chiffres)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={formData.siret}
+              onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
+              placeholder="918 642 984 00018"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">N° TVA Intracommunautaire</label>
+            <input
+              type="text"
+              className="form-input"
+              value={formData.tvaIntra}
+              onChange={(e) => setFormData({ ...formData, tvaIntra: e.target.value })}
+              placeholder="FR84918642984"
+            />
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Greffe d'immatriculation (RCS)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={formData.rcsCity}
+              onChange={(e) => setFormData({ ...formData, rcsCity: e.target.value })}
+              placeholder="Ex : Metz"
+            />
+          </div>
+
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Assurance Responsabilité Civile Pro (RCP / Décennale)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={formData.assuranceRcp}
+              onChange={(e) => setFormData({ ...formData, assuranceRcp: e.target.value })}
+              placeholder="Ex : Police Allianz Pro BTP n° 58493021"
             />
           </div>
         </div>

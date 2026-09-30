@@ -139,6 +139,12 @@ model Reservation {
   customerNotes          String?
   statusHistoryJson      String         // Audit log of state transitions
   secretAccessCode       String         // Direct guest tracking code
+  contractSignedAt       DateTime?      // Date et heure de signature du contrat
+  clientSignatureDataUrl String?        // Image PNG base64 de la signature tactile
+  checkinDataJson        String?        // État des lieux départ : photos, carburant, compteur, accessoires
+  checkoutDataJson       String?        // État des lieux retour : restitution, propreté, caution restituée
+  invoiceNumber          String?        // Numéro officiel de facture (ex: FAC-2026-0001)
+  invoiceIssuedAt        DateTime?      // Date d'émission de la facture
   createdAt              DateTime       @default(now())
   updatedAt              DateTime       @updatedAt
 }
@@ -184,6 +190,10 @@ model SiteSettings {
   openingHoursJson String  // JSON for hours Monday-Saturday
   depositPolicy   String   // Caution text
   deliveryPolicy  String   // Delivery terms
+  siret           String   @default("882 123 456 00012")
+  tvaIntra        String   @default("FR 12 882123456")
+  rcsCity         String   @default("Metz B 882 123 456")
+  assuranceRcp    String   @default("SMABTP Responsabilité Professionnelle N° 2026-CALV-4478")
   isDemoMode      Boolean  @default(true)
   updatedAt       DateTime @updatedAt
 }
