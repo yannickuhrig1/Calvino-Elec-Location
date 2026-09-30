@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
@@ -21,6 +22,30 @@ import {
 interface EquipmentPageProps {
   params: {
     slug: string;
+  };
+}
+
+export async function generateMetadata({ params }: EquipmentPageProps): Promise<Metadata> {
+  const equipment = await prisma.equipment.findUnique({
+    where: { slug: params.slug },
+    include: { category: true },
+  });
+
+  if (!equipment) {
+    return { title: 'Matériel introuvable' };
+  }
+
+  const title = `Location ${equipment.name} à Metz • ${equipment.category.name}`;
+  const description = `Louez ${equipment.name} en Moselle (57). Tarif : ${equipment.priceDay.toFixed(2)} € HT/jour. Retrait immédiat à Coin-lès-Cuvry ou livraison directe sur chantier. Réservez en ligne avec Calvino Location.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: equipment.imageUrl ? [{ url: equipment.imageUrl }] : undefined,
+    },
   };
 }
 
@@ -56,8 +81,35 @@ export default async function EquipmentDetailPage({ params }: EquipmentPageProps
   const availableUnits = equipment.units.filter((u) => u.status === 'AVAILABLE');
   const hasAvailableUnits = availableUnits.length > 0;
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://calvino-location.vercel.app';
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: equipment.name,
+    image: equipment.imageUrl ? (equipment.imageUrl.startsWith('http') ? equipment.imageUrl : `${baseUrl}${equipment.imageUrl}`) : undefined,
+    description: equipment.description,
+    brand: {
+      '@type': 'Brand',
+      name: equipment.name.split(' ')[0] || 'Calvino',
+    },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      price: equipment.priceDay.toFixed(2),
+      availability: hasAvailableUnits ? 'https://schema.org/InStock' : 'https://schema.org/LimitedAvailability',
+      seller: {
+        '@type': 'LocalBusiness',
+        name: 'CALVINO Location',
+      },
+    },
+  };
+
   return (
     <div style={{ padding: '2rem 0 5rem 0' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="container">
         {/* Fil d'Ariane */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.825rem', color: 'var(--text-muted)', marginBottom: '1.5rem', flexWrap: 'wrap' }}>

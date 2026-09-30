@@ -95,6 +95,12 @@ export function HeaderClient({ user }: HeaderClientProps) {
               Conditions & Caution
             </Link>
             <Link 
+              href="/zone-intervention-moselle" 
+              className={`nav-link ${isActive('/zone-intervention-moselle') ? 'active' : ''}`}
+            >
+              Zone Moselle 57
+            </Link>
+            <Link 
               href="/contact" 
               className={`nav-link ${isActive('/contact') ? 'active' : ''}`}
             >
@@ -179,6 +185,9 @@ export function HeaderClient({ user }: HeaderClientProps) {
             </Link>
             <Link href="/tarifs-et-conditions" onClick={() => setMobileMenuOpen(false)} className="nav-link">
               Conditions & Caution
+            </Link>
+            <Link href="/zone-intervention-moselle" onClick={() => setMobileMenuOpen(false)} className="nav-link">
+              Zone Moselle 57 & Livraison
             </Link>
             <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="nav-link">
               Contact & Agence

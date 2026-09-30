@@ -65,7 +65,8 @@ export async function SiteFooter() {
             <h4>Infos Pratiques</h4>
             <ul className="footer-links">
               <li><Link href="/comment-ca-marche">Comment ça marche</Link></li>
-              <li><Link href="/presentation" style={{ color: 'var(--brand-amber)', fontWeight: 600 }}>Présentation & Guide Admin</Link></li>
+              <li><Link href="/zone-intervention-moselle" style={{ color: 'var(--brand-amber)', fontWeight: 600 }}>Zone Moselle & Livraison (57)</Link></li>
+              <li><Link href="/presentation" style={{ color: 'var(--brand-amber)' }}>Présentation & Guide Admin</Link></li>
               <li><Link href="/tarifs-et-conditions">Tarifs & Forfaits week-end</Link></li>
               <li><Link href="/tarifs-et-conditions#caution">Modalités de caution</Link></li>
               <li><Link href="/faq">Foire aux questions</Link></li>
@@ -97,6 +98,19 @@ export async function SiteFooter() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Barème local de référencement Moselle */}
+        <div style={{
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          paddingTop: '1.25rem',
+          marginTop: '1.5rem',
+          fontSize: '0.78rem',
+          color: '#64748b',
+          lineHeight: 1.6
+        }}>
+          <strong style={{ color: '#94a3b8' }}>Secteurs d’intervention & livraison en Moselle (57) : </strong>
+          Coin-lès-Cuvry, Metz (Centre, Sablon, Magny, Borny), Marly, Augny, Montigny-lès-Metz, Saint-Julien-lès-Metz, Woippy, Verny, Cuvry, Fey, Pournoy-la-Chétive, Peltre, Thionville, Maizières-lès-Metz, Hagondange, Amnéville, Pont-à-Mousson et sillon lorrain.
         </div>
 
         {/* Bas de page légal */}
