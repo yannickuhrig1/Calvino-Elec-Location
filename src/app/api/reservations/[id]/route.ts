@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { validateUnitAvailabilityForDates } from '@/lib/availability';
+import { sendReservationConfirmedEmail, sendReservationCompletedEmail } from '@/lib/emailService';
 
 export async function GET(
   req: NextRequest,
@@ -236,6 +237,17 @@ export async function PATCH(
 
       throw new Error(`Statut demandé non pris en charge : ${newStatus}`);
     });
+
+    // Déclencheurs automatiques d'emails (non-bloquants)
+    try {
+      if (newStatus === 'CONFIRMED') {
+        await sendReservationConfirmedEmail(result);
+      } else if (newStatus === 'COMPLETED') {
+        await sendReservationCompletedEmail(result);
+      }
+    } catch (emailErr) {
+      console.error('Erreur non bloquante lors de l’envoi de l’email automatique:', emailErr);
+    }
 
     return NextResponse.json({ success: true, reservation: result });
   } catch (err: any) {

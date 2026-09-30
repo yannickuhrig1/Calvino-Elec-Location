@@ -164,6 +164,102 @@ export default async function ClientReservationDetailPage({ params }: PageProps)
           </div>
         </div>
 
+        {/* Documents Officiels Client */}
+        <div className="card" style={{ padding: '1.75rem', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.2rem', color: 'var(--brand-navy)', marginBottom: '0.35rem' }}>
+            Mes Documents Contractuels & Factures
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+            Consultez et téléchargez vos documents certifiés par Calvino Location en format A4 imprimable.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            {/* Contrat de location */}
+            <Link
+              href={`/admin/reservations/${reservation.id}/contrat`}
+              style={{
+                border: '1px solid var(--border-light)',
+                borderRadius: 'var(--radius-md)',
+                padding: '1.25rem',
+                backgroundColor: 'var(--bg-surface-subtle)',
+                textDecoration: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <FileText size={18} style={{ color: reservation.contractSignedAt ? '#059669' : '#d97706' }} />
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--brand-navy)' }}>Contrat de Location BTP</strong>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+                  {reservation.contractSignedAt ? '✓ Signé numériquement • Certifié conforme' : 'À signer en ligne ou sur place'}
+                </p>
+              </div>
+              <div style={{ marginTop: '1rem', fontSize: '0.85rem', fontWeight: 700, color: reservation.contractSignedAt ? '#059669' : '#d97706' }}>
+                {reservation.contractSignedAt ? 'Consulter le contrat signé →' : 'Signer mon contrat en ligne →'}
+              </div>
+            </Link>
+
+            {/* Facture officielle */}
+            <Link
+              href={`/admin/reservations/${reservation.id}/facture`}
+              style={{
+                border: '1px solid var(--border-light)',
+                borderRadius: 'var(--radius-md)',
+                padding: '1.25rem',
+                backgroundColor: 'var(--bg-surface-subtle)',
+                textDecoration: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <FileText size={18} style={{ color: '#2563eb' }} />
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--brand-navy)' }}>Facture Officielle</strong>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+                  Facture avec TVA 20%, coordonnées bancaires et mentions obligatoires.
+                </p>
+              </div>
+              <div style={{ marginTop: '1rem', fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>
+                Consulter & Imprimer la facture →
+              </div>
+            </Link>
+
+            {/* État des lieux */}
+            <Link
+              href={`/admin/reservations/${reservation.id}/etat-des-lieux`}
+              style={{
+                border: '1px solid var(--border-light)',
+                borderRadius: 'var(--radius-md)',
+                padding: '1.25rem',
+                backgroundColor: 'var(--bg-surface-subtle)',
+                textDecoration: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <ShieldCheck size={18} style={{ color: '#475569' }} />
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--brand-navy)' }}>État des Lieux</strong>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+                  Fiche contradictoire départ / retour avec photos et compteur.
+                </p>
+              </div>
+              <div style={{ marginTop: '1rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--brand-navy)' }}>
+                Voir la fiche d'inspection →
+              </div>
+            </Link>
+          </div>
+        </div>
+
         {/* Détail financier contractuel */}
         <div className="card" style={{ padding: '2rem', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.2rem', color: 'var(--brand-navy)', marginBottom: '1.25rem' }}>

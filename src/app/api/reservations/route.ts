@@ -3,6 +3,7 @@ import { parseISO, isValid } from 'date-fns';
 import prisma from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { calculateRentalPricing } from '@/lib/pricing';
+import { sendAdminNewBookingAlert } from '@/lib/emailService';
 
 export async function POST(req: NextRequest) {
   try {
@@ -161,6 +162,13 @@ export async function POST(req: NextRequest) {
         where: { id: validatedPromo.id },
         data: { usedCount: { increment: 1 } },
       }).catch((e) => console.error('Failed to increment promo usage:', e));
+    }
+
+    // Déclencher l'alerte email pour l'administrateur (non bloquant)
+    try {
+      await sendAdminNewBookingAlert(reservation);
+    } catch (emailErr) {
+      console.error('Erreur non bloquante lors de l’envoi de l’alerte email admin:', emailErr);
     }
 
     return NextResponse.json({

@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { StatusBadge } from '@/components/StatusBadge';
 import { AdminStatusManager } from './AdminStatusManager';
+import { ReservationEmailHub } from './ReservationEmailHub';
 import { 
   ArrowLeft, 
   User, 
@@ -188,6 +189,23 @@ export default async function AdminReservationDetailPage({ params }: AdminDetail
             >
               <span>📸 État des Lieux & Photos</span>
             </Link>
+            <a
+              href="#centre-emails"
+              style={{
+                backgroundColor: '#3B82F6',
+                color: '#FFF',
+                padding: '0.45rem 0.9rem',
+                borderRadius: '0.35rem',
+                fontSize: '0.825rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <span>📧 Centre d'Emails</span>
+            </a>
           </div>
         </div>
 
@@ -265,6 +283,16 @@ export default async function AdminReservationDetailPage({ params }: AdminDetail
             adminNotes: reservation.adminNotes,
           }}
           units={unitOptions}
+        />
+      </div>
+
+      {/* Centre d'Emails et Notifications Transactionnelles */}
+      <div id="centre-emails">
+        <ReservationEmailHub
+          reservationId={reservation.id}
+          customerEmail={reservation.customerEmail}
+          customerName={reservation.customerName}
+          reservationNumber={reservation.reservationNumber}
         />
       </div>
 

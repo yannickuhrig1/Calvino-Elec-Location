@@ -12,7 +12,7 @@ interface FacturePageProps {
 
 export default async function FacturePage({ params }: FacturePageProps) {
   const user = await getCurrentUser();
-  if (!user || user.role !== 'ADMIN') {
+  if (!user) {
     redirect('/connexion');
   }
 
@@ -30,6 +30,16 @@ export default async function FacturePage({ params }: FacturePageProps) {
 
   if (!reservation) {
     notFound();
+  }
+
+  // Vérifier propriétaire ou admin
+  const isAuthorized =
+    user.role === 'ADMIN' ||
+    reservation.userId === user.id ||
+    reservation.customerEmail.toLowerCase() === user.email.toLowerCase();
+
+  if (!isAuthorized) {
+    redirect('/compte');
   }
 
   // Si pas encore de numéro de facture, en générer un officiel automatiquement

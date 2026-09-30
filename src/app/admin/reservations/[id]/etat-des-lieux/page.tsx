@@ -12,7 +12,7 @@ interface InspectionPageProps {
 
 export default async function InspectionPage({ params }: InspectionPageProps) {
   const user = await getCurrentUser();
-  if (!user || user.role !== 'ADMIN') {
+  if (!user) {
     redirect('/connexion');
   }
 
@@ -31,6 +31,16 @@ export default async function InspectionPage({ params }: InspectionPageProps) {
 
   if (!reservation) {
     notFound();
+  }
+
+  // Vérifier propriétaire ou admin
+  const isAuthorized =
+    user.role === 'ADMIN' ||
+    reservation.userId === user.id ||
+    reservation.customerEmail.toLowerCase() === user.email.toLowerCase();
+
+  if (!isAuthorized) {
+    redirect('/compte');
   }
 
   return (

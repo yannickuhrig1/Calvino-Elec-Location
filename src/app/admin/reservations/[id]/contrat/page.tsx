@@ -12,7 +12,7 @@ interface ContratPageProps {
 
 export default async function ContratPage({ params }: ContratPageProps) {
   const user = await getCurrentUser();
-  if (!user || user.role !== 'ADMIN') {
+  if (!user) {
     redirect('/connexion');
   }
 
@@ -30,6 +30,16 @@ export default async function ContratPage({ params }: ContratPageProps) {
 
   if (!reservation) {
     notFound();
+  }
+
+  // Vérifier propriétaire ou admin
+  const isAuthorized =
+    user.role === 'ADMIN' ||
+    reservation.userId === user.id ||
+    reservation.customerEmail.toLowerCase() === user.email.toLowerCase();
+
+  if (!isAuthorized) {
+    redirect('/compte');
   }
 
   const settings = await prisma.siteSettings.findUnique({
