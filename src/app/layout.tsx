@@ -3,6 +3,7 @@ import './globals.css';
 import { SiteHeader } from '@/components/SiteHeader';
 import { PromoBanner } from '@/components/PromoBanner';
 import { SiteFooter } from '@/components/SiteFooter';
+import { PwaRegister } from '@/components/PwaRegister';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://calvino-location.vercel.app';
 
@@ -128,6 +129,11 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
+        <meta name="theme-color" content="#0f172a" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Calvino Location" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
@@ -138,6 +144,7 @@ export default function RootLayout({
         <PromoBanner />
         <main>{children}</main>
         <SiteFooter />
+        <PwaRegister />
       </body>
     </html>
   );
