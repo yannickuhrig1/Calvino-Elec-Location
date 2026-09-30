@@ -20,6 +20,7 @@ const COLORS = {
   greenSuccess: '059669',  // Emerald 600 - Rentable, positif, encaissement
   greenLight: 'ECFDF5',    // Emerald 50 - Fond KPI CA
   greenDark: '065F46',     // Emerald 800 - Texte KPI CA
+  emeraldDark: '065F46',   // Emerald 800 alias
   purpleAccent: '7C3AED',  // Purple 600 - Marge nette
   purpleLight: 'F5F3FF',   // Purple 50 - Fond KPI Marge
   purpleDark: '5B21B6',    // Purple 800 - Texte KPI Marge
@@ -100,8 +101,8 @@ function createKpiCard(
   }
 
   // Bordures extérieures de la carte
-  const startColIdx = ws.getCell(`${startCol}1`).col;
-  const endColIdx = ws.getCell(`${endCol}1`).col;
+  const startColIdx = Number(ws.getCell(`${startCol}1`).col);
+  const endColIdx = Number(ws.getCell(`${endCol}1`).col);
   const endRowIdx = subtitle ? startRow + 3 : startRow + 2;
 
   for (let r = startRow; r <= endRowIdx; r++) {
