@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 
+// Always guarantee a default fallback for DATABASE_URL if not set
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'file:./dev.db';
+}
+
 // Support Vercel serverless runtime with SQLite
 if (process.env.VERCEL) {
   const currentDbUrl = process.env.DATABASE_URL || 'file:./dev.db';
