@@ -46,6 +46,19 @@ const BRAND_SLATE = '#334155';
 const BRAND_BG = '#f8fafc';
 const BRAND_BORDER = '#e2e8f0';
 
+/**
+ * Assainit les données textuelles pour prévenir toute injection HTML dans les emails
+ */
+export function escapeHtml(str: any): string {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function getEmailWrapper(title: string, contentHtml: string): string {
   const currentYear = new Date().getFullYear();
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://calvino-location.vercel.app';
@@ -152,7 +165,7 @@ export function buildReservationConfirmedEmail(reservation: any): { subject: str
 
   const htmlContent = `
     <div style="font-size: 16px; color: ${BRAND_NAVY}; font-weight: 700; margin-bottom: 12px;">
-      Bonjour ${reservation.customerName},
+      Bonjour ${escapeHtml(reservation.customerName)},
     </div>
     
     <p style="font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">
@@ -189,7 +202,7 @@ export function buildReservationConfirmedEmail(reservation: any): { subject: str
             </tr>
             <tr>
               <td style="color: #64748b;">Mode de mise à disposition :</td>
-              <td>${reservation.deliveryMode === 'DELIVERY_ON_SITE' ? `🚚 Livraison sur chantier : <strong>${reservation.deliveryAddress}</strong>` : '🏢 Retrait au dépôt (Coin-lès-Cuvry)'}</td>
+              <td>${reservation.deliveryMode === 'DELIVERY_ON_SITE' ? `🚚 Livraison sur chantier : <strong>${escapeHtml(reservation.deliveryAddress)}</strong>` : '🏢 Retrait au dépôt (Coin-lès-Cuvry)'}</td>
             </tr>
             <tr>
               <td style="color: #64748b;">Montant Total Location :</td>
@@ -261,7 +274,7 @@ export function buildReturnReminderEmail(reservation: any): { subject: string; h
 
   const htmlContent = `
     <div style="font-size: 16px; color: ${BRAND_NAVY}; font-weight: 700; margin-bottom: 12px;">
-      Bonjour ${reservation.customerName},
+      Bonjour ${escapeHtml(reservation.customerName)},
     </div>
     
     <p style="font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">
@@ -302,7 +315,7 @@ export function buildReturnReminderEmail(reservation: any): { subject: string; h
     <div style="background-color: #f1f5f9; padding: 14px 18px; border-radius: 6px; font-size: 13px; color: ${BRAND_SLATE}; margin-bottom: 20px;">
       <strong>${reservation.deliveryMode === 'DELIVERY_ON_SITE' ? '🚚 Modalité reprise sur chantier :' : '🏢 Modalité restitution au dépôt :'}</strong><br>
       ${reservation.deliveryMode === 'DELIVERY_ON_SITE' 
-        ? `Notre chauffeur interviendra à l'adresse du chantier : <strong>${reservation.deliveryAddress}</strong> à l'horaire convenu (${reservation.returnTime}). Merci de veiller à ce que le matériel soit accessible.`
+        ? `Notre chauffeur interviendra à l'adresse du chantier : <strong>${escapeHtml(reservation.deliveryAddress)}</strong> à l'horaire convenu (${reservation.returnTime}). Merci de veiller à ce que le matériel soit accessible.`
         : `Rendez-vous à notre dépôt : <strong>71 Rue de la Fontenelle, 57420 Coin-lès-Cuvry</strong>.`
       }
     </div>
@@ -352,7 +365,7 @@ export function buildReservationCompletedEmail(reservation: any): { subject: str
 
   const htmlContent = `
     <div style="font-size: 16px; color: ${BRAND_NAVY}; font-weight: 700; margin-bottom: 12px;">
-      Bonjour ${reservation.customerName},
+      Bonjour ${escapeHtml(reservation.customerName)},
     </div>
     
     <p style="font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">
@@ -465,17 +478,17 @@ export function buildAdminNewBookingAlert(reservation: any): { subject: string; 
             <tr>
               <td style="color: #64748b;">Client :</td>
               <td style="font-weight: 700; color: ${BRAND_NAVY};">
-                ${reservation.customerName}
-                ${reservation.customerCompany ? ` (${reservation.customerCompany})` : ''}
+                ${escapeHtml(reservation.customerName)}
+                ${reservation.customerCompany ? ` (${escapeHtml(reservation.customerCompany)})` : ''}
               </td>
             </tr>
             <tr>
               <td style="color: #64748b;">Téléphone :</td>
-              <td><a href="tel:${reservation.customerPhone}" style="color: ${BRAND_AMBER}; font-weight: 700;">${reservation.customerPhone}</a></td>
+              <td><a href="tel:${escapeHtml(reservation.customerPhone)}" style="color: ${BRAND_AMBER}; font-weight: 700;">${escapeHtml(reservation.customerPhone)}</a></td>
             </tr>
             <tr>
               <td style="color: #64748b;">Email :</td>
-              <td><a href="mailto:${reservation.customerEmail}" style="color: ${BRAND_SLATE};">${reservation.customerEmail}</a></td>
+              <td><a href="mailto:${escapeHtml(reservation.customerEmail)}" style="color: ${BRAND_SLATE};">${escapeHtml(reservation.customerEmail)}</a></td>
             </tr>
             <tr>
               <td style="color: #64748b;">Matériel demandé :</td>
@@ -487,7 +500,7 @@ export function buildAdminNewBookingAlert(reservation: any): { subject: string; 
             </tr>
             <tr>
               <td style="color: #64748b;">Mode logistique :</td>
-              <td>${reservation.deliveryMode === 'DELIVERY_ON_SITE' ? `🚚 Livraison sur chantier : ${reservation.deliveryAddress}` : '🏢 Retrait direct au dépôt'}</td>
+              <td>${reservation.deliveryMode === 'DELIVERY_ON_SITE' ? `🚚 Livraison sur chantier : ${escapeHtml(reservation.deliveryAddress)}` : '🏢 Retrait direct au dépôt'}</td>
             </tr>
             <tr>
               <td style="color: #64748b;">Montant Facturable :</td>
@@ -496,7 +509,7 @@ export function buildAdminNewBookingAlert(reservation: any): { subject: string; 
             ${reservation.customerNotes ? `
             <tr>
               <td style="color: #64748b; vertical-align: top;">Remarque client :</td>
-              <td style="font-style: italic; color: #475569;">« ${reservation.customerNotes} »</td>
+              <td style="font-style: italic; color: #475569;">« ${escapeHtml(reservation.customerNotes)} »</td>
             </tr>
             ` : ''}
           </table>

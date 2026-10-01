@@ -1,9 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/backend/auth/authService';
 import { ReservationService } from '@/backend/reservations/reservationService';
+import { checkRateLimit, getClientIp } from '@/backend/security/rateLimiter';
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const limit = checkRateLimit(`booking:${clientIp}`, 10, 10 * 60);
+
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: `Nombre maximum de réservations atteint pour cette période. Réessayez dans ${Math.ceil(limit.resetInSeconds / 60)} minutes.` },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(limit.resetInSeconds) },
+        }
+      );
+    }
+
     const user = await getCurrentUser();
     const body = await req.json();
 

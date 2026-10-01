@@ -7,6 +7,7 @@ import {
   sendReservationCompletedEmail 
 } from '@/backend/email/emailService';
 import { parseISO, isValid } from 'date-fns';
+import { randomBytes } from 'crypto';
 
 export interface CreateReservationDto {
   equipmentId: string;
@@ -88,7 +89,7 @@ export class ReservationService {
     const reservationCount = await prisma.reservation.count();
     const currentYear = new Date().getFullYear();
     const reservationNumber = `CALV-${currentYear}-${String(reservationCount + 1).padStart(4, '0')}`;
-    const secretAccessCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const secretAccessCode = randomBytes(4).toString('hex').toUpperCase();
 
     const initialHistory = [
       {

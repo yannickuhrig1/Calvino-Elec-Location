@@ -1,11 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/backend/db/prisma';
 import { differenceInCalendarDays, parseISO } from 'date-fns';
+import { checkRateLimit, getClientIp } from '@/backend/security/rateLimiter';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = getClientIp(request);
+    const limit = checkRateLimit(`promo:${clientIp}`, 10, 60);
+
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { valid: false, error: `Trop de requêtes. Veuillez patienter ${limit.resetInSeconds} secondes.` },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(limit.resetInSeconds) },
+        }
+      );
+    }
+
     const body = await request.json();
     const rawCode = (body.code || '').trim().toUpperCase();
 

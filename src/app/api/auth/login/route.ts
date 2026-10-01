@@ -2,9 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import prisma from '@/backend/db/prisma';
 import { verifyPassword, createSessionToken, COOKIE_NAME } from '@/backend/auth/authService';
+import { checkRateLimit, getClientIp } from '@/backend/security/rateLimiter';
 
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req);
+    const limit = checkRateLimit(`login:${clientIp}`, 5, 60);
+
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: `Trop de tentatives de connexion. Veuillez réessayer dans ${limit.resetInSeconds} secondes.` },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(limit.resetInSeconds) },
+        }
+      );
+    }
+
     const { email, password } = await req.json();
 
     if (!email || !password) {

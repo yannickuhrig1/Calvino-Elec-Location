@@ -6,3 +6,4 @@ export * from './email/emailService';
 export * from './accounting/accountingService';
 export * from './accounting/excelGenerator';
 export * from './reservations/reservationService';
+export * from './security/rateLimiter';

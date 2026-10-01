@@ -3,8 +3,21 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import prisma from '@/backend/db/prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'calvino-location-super-secure-jwt-key-2026-production';
-const key = new TextEncoder().encode(JWT_SECRET);
+function getJwtKey(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('⚠️ SÉCURITÉ : La variable JWT_SECRET est absente des variables d\'environnement. Configurez un secret cryptographique fort dans le dashboard Vercel.');
+    }
+    return new TextEncoder().encode(
+      process.env.NODE_ENV === 'production'
+        ? 'calvino-prod-fallback-key-strictly-change-in-env-dashboard'
+        : 'calvino-dev-local-jwt-secret-key-32chars-min'
+    );
+  }
+  return new TextEncoder().encode(secret);
+}
+
 export const COOKIE_NAME = 'calvino_session';
 
 export interface SessionPayload {
@@ -24,16 +37,18 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 export async function createSessionToken(payload: SessionPayload): Promise<string> {
+  const secretKey = getJwtKey();
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(key);
+    .sign(secretKey);
 }
 
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, key, {
+    const secretKey = getJwtKey();
+    const { payload } = await jwtVerify(token, secretKey, {
       algorithms: ['HS256'],
     });
     return payload as unknown as SessionPayload;
