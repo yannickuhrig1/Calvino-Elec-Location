@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 import { PresentationClient } from './PresentationClient';
 
 export const metadata: Metadata = {

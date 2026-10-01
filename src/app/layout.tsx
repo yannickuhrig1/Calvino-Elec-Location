@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { SiteHeader } from '@/components/SiteHeader';
-import { PromoBanner } from '@/components/PromoBanner';
-import { SiteFooter } from '@/components/SiteFooter';
-import { PwaRegister } from '@/components/PwaRegister';
+import { SiteHeader } from '@/frontend/components/SiteHeader';
+import { PromoBanner } from '@/frontend/components/PromoBanner';
+import { SiteFooter } from '@/frontend/components/SiteFooter';
+import { PwaRegister } from '@/frontend/components/PwaRegister';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://calvino-location.vercel.app';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { EquipmentCard } from '@/components/EquipmentCard';
+import prisma from '@/backend/db/prisma';
+import { EquipmentCard } from '@/frontend/features/booking/EquipmentCard';
 import { Search, Filter, Calendar, X, SlidersHorizontal, Info } from 'lucide-react';
 import { parseISO, isValid } from 'date-fns';
-import { checkEquipmentAvailability } from '@/lib/availability';
+import { checkEquipmentAvailability } from '@/backend/availability/availabilityService';
 
 export const dynamic = 'force-dynamic';
 

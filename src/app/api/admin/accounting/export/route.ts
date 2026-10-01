@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { buildAccountingTransactions, generateAccountingCsv } from '@/lib/accounting';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { buildAccountingTransactions, generateAccountingCsv } from '@/backend/accounting/accountingService';
 
 export const dynamic = 'force-dynamic';
 

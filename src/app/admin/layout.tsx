@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
 import { 
   ShieldCheck, 
   LayoutDashboard, 

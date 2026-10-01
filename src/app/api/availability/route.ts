@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseISO, isValid } from 'date-fns';
-import { checkEquipmentAvailability, getEquipmentMonthAvailability, isWeekendDay } from '@/lib/availability';
+import { checkEquipmentAvailability, getEquipmentMonthAvailability, isWeekendDay } from '@/backend/availability/availabilityService';
 
 export const dynamic = 'force-dynamic';
 

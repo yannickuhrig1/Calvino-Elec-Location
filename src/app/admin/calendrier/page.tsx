@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { StatusBadge } from '@/components/StatusBadge';
+import prisma from '@/backend/db/prisma';
+import { StatusBadge } from '@/frontend/components/StatusBadge';
 import { Calendar as CalendarIcon, Clock, Truck, CheckCircle2, ChevronRight } from 'lucide-react';
 import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale';

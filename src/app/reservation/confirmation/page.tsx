@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { StatusBadge } from '@/components/StatusBadge';
+import prisma from '@/backend/db/prisma';
+import { StatusBadge } from '@/frontend/components/StatusBadge';
 import { 
   CheckCircle2, 
   Clock, 

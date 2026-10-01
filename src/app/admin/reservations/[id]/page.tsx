@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { StatusBadge } from '@/components/StatusBadge';
-import { AdminStatusManager } from './AdminStatusManager';
-import { ReservationEmailHub } from './ReservationEmailHub';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { StatusBadge } from '@/frontend/components/StatusBadge';
+import { AdminStatusManager } from '@/frontend/features/admin/AdminStatusManager';
+import { ReservationEmailHub } from '@/frontend/features/admin/ReservationEmailHub';
 import { 
   ArrowLeft, 
   User, 

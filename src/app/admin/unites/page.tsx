@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 import { UnitStatusChanger } from './UnitStatusChanger';
 import { Layers, Wrench, Clock, CheckCircle2, AlertTriangle, Plus } from 'lucide-react';
 import { format } from 'date-fns';

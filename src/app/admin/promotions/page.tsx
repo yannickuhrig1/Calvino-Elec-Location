@@ -1,8 +1,8 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { PromoManagerClient } from './PromoManagerClient';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { PromoManagerClient } from '@/frontend/features/admin/PromoManagerClient';
 
 export const dynamic = 'force-dynamic';
 

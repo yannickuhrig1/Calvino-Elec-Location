@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import prisma from '@/lib/prisma';
-import { verifyPassword, createSessionToken, COOKIE_NAME } from '@/lib/auth';
+import prisma from '@/backend/db/prisma';
+import { verifyPassword, createSessionToken, COOKIE_NAME } from '@/backend/auth/authService';
 
 export async function POST(req: NextRequest) {
   try {

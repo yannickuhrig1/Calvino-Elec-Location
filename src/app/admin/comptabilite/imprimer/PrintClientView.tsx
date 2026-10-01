@@ -3,7 +3,7 @@
 import React from 'react';
 import { Printer, ArrowLeft, Download } from 'lucide-react';
 import Link from 'next/link';
-import { EquipmentFinancialStats, GlobalParcFinancials, AccountingSummary } from '@/lib/accounting';
+import { EquipmentFinancialStats, GlobalParcFinancials, AccountingSummary } from '@/backend/accounting/accountingService';
 
 interface PrintProps {
   equipments: EquipmentFinancialStats[];

@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://calvino-location.vercel.app';

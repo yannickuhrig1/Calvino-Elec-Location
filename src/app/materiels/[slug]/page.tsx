@@ -2,9 +2,9 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { BookingForm } from '@/components/BookingForm';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { BookingForm } from '@/frontend/features/booking/BookingForm';
 import { 
   ShieldCheck, 
   Check, 

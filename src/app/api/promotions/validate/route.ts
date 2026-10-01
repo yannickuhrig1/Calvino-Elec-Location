@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 
 export const dynamic = 'force-dynamic';

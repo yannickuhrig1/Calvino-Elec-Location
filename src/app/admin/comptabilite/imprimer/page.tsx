@@ -1,11 +1,11 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 import {
   computeEquipmentFinancials,
   computeGlobalParcFinancials,
   buildAccountingTransactions,
   computeAccountingSummary,
-} from '@/lib/accounting';
+} from '@/backend/accounting/accountingService';
 import { PrintClientView } from './PrintClientView';
 
 export const dynamic = 'force-dynamic';

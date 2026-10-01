@@ -1,8 +1,8 @@
 import React from 'react';
 import { notFound, redirect } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { ContratClientView } from './ContratClientView';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { ContratClientView } from '@/frontend/features/contracts/ContratClientView';
 
 export const dynamic = 'force-dynamic';
 

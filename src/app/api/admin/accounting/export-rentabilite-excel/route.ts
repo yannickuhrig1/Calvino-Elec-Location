@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
 import {
   computeEquipmentFinancials,
   computeGlobalParcFinancials,
-} from '@/lib/accounting';
-import { generateStyledRentabiliteExcel } from '@/lib/excelGenerator';
+} from '@/backend/accounting/accountingService';
+import { generateStyledRentabiliteExcel } from '@/backend/accounting/excelGenerator';
 
 export const dynamic = 'force-dynamic';
 

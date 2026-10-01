@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { EquipmentCard } from '@/components/EquipmentCard';
+import prisma from '@/backend/db/prisma';
+import { EquipmentCard } from '@/frontend/features/booking/EquipmentCard';
 import { 
   Wrench, 
   Wind, 

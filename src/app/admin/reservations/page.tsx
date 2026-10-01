@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { StatusBadge } from '@/components/StatusBadge';
+import prisma from '@/backend/db/prisma';
+import { StatusBadge } from '@/frontend/components/StatusBadge';
 import { Search, Filter, ChevronRight, Calendar, User, Phone } from 'lucide-react';
 import { format } from 'date-fns';
 

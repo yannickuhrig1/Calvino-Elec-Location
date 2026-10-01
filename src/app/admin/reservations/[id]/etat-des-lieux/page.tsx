@@ -1,8 +1,8 @@
 import React from 'react';
 import { notFound, redirect } from 'next/navigation';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
-import { EtatDesLieuxClientView } from './EtatDesLieuxClientView';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { EtatDesLieuxClientView } from '@/frontend/features/inspection/EtatDesLieuxClientView';
 
 export const dynamic = 'force-dynamic';
 

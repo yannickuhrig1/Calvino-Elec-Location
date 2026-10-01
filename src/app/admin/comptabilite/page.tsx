@@ -1,7 +1,7 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
-import { buildAccountingTransactions } from '@/lib/accounting';
-import { ComptabiliteClient } from './ComptabiliteClient';
+import prisma from '@/backend/db/prisma';
+import { buildAccountingTransactions } from '@/backend/accounting/accountingService';
+import { ComptabiliteClient } from '@/frontend/features/admin/ComptabiliteClient';
 
 export const dynamic = 'force-dynamic';
 

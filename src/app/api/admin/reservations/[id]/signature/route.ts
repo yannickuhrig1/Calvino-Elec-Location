@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import prisma from '@/backend/db/prisma';
+import { getCurrentUser } from '@/backend/auth/authService';
+import { ReservationService } from '@/backend/reservations/reservationService';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,14 +11,8 @@ export async function POST(
 ) {
   try {
     const user = await getCurrentUser();
-    if (!user || user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Accès non autorisé' }, { status: 403 });
-    }
-
-    const { signatureDataUrl, signerName } = await req.json();
-
-    if (!signatureDataUrl) {
-      return NextResponse.json({ error: 'Signature manquante' }, { status: 400 });
+    if (!user) {
+      return NextResponse.json({ error: 'Accès non autorisé' }, { status: 401 });
     }
 
     const reservation = await prisma.reservation.findUnique({
@@ -28,23 +23,23 @@ export async function POST(
       return NextResponse.json({ error: 'Réservation introuvable' }, { status: 404 });
     }
 
-    const now = new Date();
-    const history = JSON.parse(reservation.statusHistoryJson || '[]');
-    history.push({
-      status: reservation.status,
-      date: now.toISOString(),
-      author: `${user.firstName} ${user.lastName} (Admin)`,
-      note: `Contrat de location signé électroniquement par ${signerName || reservation.customerName}.`,
-    });
+    const isAuthorized =
+      user.role === 'ADMIN' ||
+      reservation.userId === user.id ||
+      reservation.customerEmail.toLowerCase() === user.email.toLowerCase();
 
-    const updated = await prisma.reservation.update({
-      where: { id: params.id },
-      data: {
-        contractSignedAt: now,
-        clientSignatureDataUrl: signatureDataUrl,
-        statusHistoryJson: JSON.stringify(history),
-      },
-    });
+    if (!isAuthorized) {
+      return NextResponse.json({ error: 'Accès non autorisé' }, { status: 403 });
+    }
+
+    const { signatureDataUrl, signerName } = await req.json();
+
+    if (!signatureDataUrl) {
+      return NextResponse.json({ error: 'Signature manquante' }, { status: 400 });
+    }
+
+    const author = `${user.firstName} ${user.lastName} (${user.role === 'ADMIN' ? 'Admin' : 'Client'})`;
+    const updated = await ReservationService.signContract(params.id, signatureDataUrl, author);
 
     return NextResponse.json({
       success: true,

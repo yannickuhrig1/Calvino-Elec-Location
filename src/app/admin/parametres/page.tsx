@@ -1,6 +1,6 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
-import { AdminSettingsClient } from './AdminSettingsClient';
+import prisma from '@/backend/db/prisma';
+import { AdminSettingsClient } from '@/frontend/features/admin/AdminSettingsClient';
 
 export const dynamic = 'force-dynamic';
 

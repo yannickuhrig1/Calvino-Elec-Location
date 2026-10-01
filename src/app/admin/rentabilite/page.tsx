@@ -1,10 +1,10 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
+import prisma from '@/backend/db/prisma';
 import {
   computeEquipmentFinancials,
   computeGlobalParcFinancials,
-} from '@/lib/accounting';
-import { RentabiliteClient } from './RentabiliteClient';
+} from '@/backend/accounting/accountingService';
+import { RentabiliteClient } from '@/frontend/features/admin/RentabiliteClient';
 
 export const dynamic = 'force-dynamic';
 
